@@ -18,9 +18,13 @@ const AuthenticationContextProvider = ({ children }) => {
     auth.onAuthStateChanged((u) => {
       if (u) {
         setUser(u);
-        // navigate("/");
+        if (location.pathname == "/login") {
+          navigate("/load-data");
+        }
       } else {
-        // navigate("/login");
+        if (location.pathname != '/') {
+          navigate("/login");
+        }
       }
     });
   }, []);
