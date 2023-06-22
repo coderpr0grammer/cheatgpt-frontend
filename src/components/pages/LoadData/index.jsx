@@ -83,30 +83,23 @@ const LoadData = () => {
 
               console.log(chunks);
 
-            //   const functions = getFunctions();
-            //   const embedAndUpsert = httpsCallable(functions, "embedAndUpsert");
-            //   console.log(functions)
-            //   embedAndUpsert({ chunks: chunks, fileID: file.name })
-            //     .then((response) => {
-            //         console.log(response)
-            //       if (response.ok) {
-            //         // Request successful
-            //         console.log(response)
-            //         return response.json();
-            //       }
-            //       throw new Error("Error: " + response.status);
-            //     })
+              // const functions = getFunctions();
+              // const embedAndUpsert = httpsCallable(functions, "sendMessage");
+              // console.log(functions)
 
-
-                // .then((data) => {
-                //   console.log(data);
-                // })
-                // .catch((error) => {
-                //   console.error("Error:", error);
-                // });
+              // embedAndUpsert({ chunks: chunks, fileID: file.name })
+              //   .then((response) => {
+              //       console.log(response)
+              //     if (response.ok) {
+              //       // Request successful
+              //       console.log(response)
+              //       return response.json();
+              //     }
+              //     throw new Error("Error: " + response.status);
+              //   })
 
               fetch(
-                "https://embedandupsert-wejuqjonkq-uc.a.run.app",
+                "https://embedandupsert-wejuqjonkq-uc.a.run.app/",
                 {
                   method: "POST",
                   headers: {
@@ -129,10 +122,10 @@ const LoadData = () => {
                   console.error("Error:", error);
                 });
 
-            //   embedBatch(chunks, async (embeddings) => {
-            //     await chunkedUpsert(index.current, embeddings, "default");
-            //     console.log("done upsert");
-            //   });
+              // embedBatch(chunks, async (embeddings) => {
+              //   await chunkedUpsert(index.current, embeddings, "default");
+              //   console.log("done upsert");
+              // });
             })
             .catch((error) => {
               console.error("Error converting to HTML:", error);

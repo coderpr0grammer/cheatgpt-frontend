@@ -21,8 +21,8 @@ const { uuid } = require("uuidv4");
 
 const app = express();
 
-const cors = require("cors");
-app.use(cors());
+const cors = require("cors")({ origin: true });
+// app.use(cors());
 
 var bodyParser = require("body-parser");
 
@@ -133,50 +133,59 @@ app.post("/", async (req) => {
   }
 });
 
-exports.embedAndUpsert = onRequest({
+exports.embedAndUpsert = onRequest(
+  {
     timeoutSeconds: 300,
     memory: "1GiB",
-  }, async (req, res) => {
-    let index = await run();
-  
-    const { chunks, fileID } = req.body;
-    //   const chunks = ["hello", "world"];
-    //   const fileID = "1234";
-    try {
-      let embeddingRefs = [];
-  
-      await embedBatch(chunks, async (chunk, embedding, embeddingID) => {
-        console.log("embedding:", embedding);
-  
-        const upsertRequest = {
-          vectors: [
-            {
-              id: embeddingID,
-              values: embedding,
-              metadata: {
-                type: "study-notes",
-                originalText: chunk,
-                documentID: fileID,
+  },
+  async (req, res) => {
+    cors(req, res, async () => {
+      // your function body here - use the provided req and res from cors
+      let index = await run();
+
+      const { chunks, fileID } = req.body;
+      //   const chunks = ["hello", "world"];
+      //   const fileID = "1234";
+
+      try {
+        let embeddingRefs = [];
+
+        await embedBatch(chunks, async (chunk, embedding, embeddingID) => {
+          console.log("embedding:", embedding);
+
+          const upsertRequest = {
+            vectors: [
+              {
+                id: embeddingID,
+                values: embedding,
+                metadata: {
+                  type: "study-notes",
+                  originalText: chunk,
+                  documentID: fileID,
+                },
               },
-            },
-          ],
-          namespace: "tester1",
-        };
-  
-        embeddingRefs.push({ id: embeddingID, fileID: fileID });
-  
-        await index.upsert({ upsertRequest });
-        console.log("done upsert");
-      })
-        .then(() => {
-          res.json({ response: "success", embeddingsUpserted: embeddingRefs });
-          // console.log(embeddingRefs);
+            ],
+            namespace: "tester1",
+          };
+
+          embeddingRefs.push({ id: embeddingID, fileID: fileID });
+
+          await index.upsert({ upsertRequest });
+          console.log("done upsert");
         })
-        .catch((error) => {
-          res.json({ response: "error", errorMessage: error });
-        });
-    } catch (error) {
-      res.json({ response: "error", errorMessage: error });
-    }});
-
-
+          .then(() => {
+            res.json({
+              response: "success",
+              embeddingsUpserted: embeddingRefs,
+            });
+            // console.log(embeddingRefs);
+          })
+          .catch((error) => {
+            res.json({ response: "error", errorMessage: error });
+          });
+      } catch (error) {
+        res.json({ response: "error", errorMessage: error });
+      }
+    });
+  }
+);
