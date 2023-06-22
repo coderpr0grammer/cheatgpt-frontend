@@ -1,4 +1,5 @@
 import mammoth from "mammoth";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 const LoadData = () => {
   function splitTextIntoChunks(text, chunkSize = 128) {
@@ -82,13 +83,38 @@ const LoadData = () => {
 
               console.log(chunks);
 
-              fetch("https://embeddings-api.vercel.app/api", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ chunks: chunks, fileID: file.name }),
-              })
+            //   const functions = getFunctions();
+            //   const embedAndUpsert = httpsCallable(functions, "embedAndUpsert");
+            //   console.log(functions)
+            //   embedAndUpsert({ chunks: chunks, fileID: file.name })
+            //     .then((response) => {
+            //         console.log(response)
+            //       if (response.ok) {
+            //         // Request successful
+            //         console.log(response)
+            //         return response.json();
+            //       }
+            //       throw new Error("Error: " + response.status);
+            //     })
+
+
+                // .then((data) => {
+                //   console.log(data);
+                // })
+                // .catch((error) => {
+                //   console.error("Error:", error);
+                // });
+
+              fetch(
+                "https://embedandupsert-wejuqjonkq-uc.a.run.app",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({ chunks: chunks, fileID: file.name }),
+                }
+              )
                 .then((response) => {
                   if (response.ok) {
                     // Request successful
@@ -103,10 +129,10 @@ const LoadData = () => {
                   console.error("Error:", error);
                 });
 
-              // embedBatch(chunks, async (embeddings) => {
-              //   await chunkedUpsert(index.current, embeddings, "default");
-              //   console.log("done upsert");
-              // });
+            //   embedBatch(chunks, async (embeddings) => {
+            //     await chunkedUpsert(index.current, embeddings, "default");
+            //     console.log("done upsert");
+            //   });
             })
             .catch((error) => {
               console.error("Error converting to HTML:", error);
@@ -121,24 +147,36 @@ const LoadData = () => {
   }
 
   return (
-    <div>
-      <form className="flex items-center space-x-6">
-        <label className="block">
-          <span className="sr-only">Choose profile photo</span>
-          <input
-            type="file"
-            className="block w-full text-sm text-slate-500
+    <section className="flex flex-col console" style={{ maxHeight: "100vh" }}>
+      <div className="flex-grow">
+        <div className="h-screen flex justify-center items-center">
+          <div
+            className="flex h-full relative"
+            style={{ maxHeight: "100vh", overflowY: "hidden" }}
+          >
+            <main className="flex items-center" style={{ overflowY: "hidden" }}>
+              <form className="flex flex-col items-center space-x-6">
+                <h1>Upload your study sheet</h1>
+
+                <label className="block">
+                  <span className="sr-only">Choose profile photo</span>
+                  <input
+                    type="file"
+                    className="block w-full text-sm text-slate-500
                     file:mr-4 file:py-2 file:px-4
                     file:rounded-full file:border-0
                     file:text-sm file:font-semibold
                     file:bg-violet-50 file:text-violet-700
-                    hover:file:bg-violet-100"
-                    
-            onChange={(e) => processDocxFile(e.target.files[0])}
-          />
-        </label>
-      </form>
-    </div>
+                    hover:file:bg-violet-100 mt-6"
+                    onChange={(e) => processDocxFile(e.target.files[0])}
+                  />
+                </label>
+              </form>
+            </main>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 };
 
