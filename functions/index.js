@@ -143,7 +143,7 @@ exports.embedAndUpsert = onRequest(
       // your function body here - use the provided req and res from cors
       let index = await run();
 
-      const { chunks, fileID } = req.body;
+      const { chunks, fileID, namespace } = req.body;
       //   const chunks = ["hello", "world"];
       //   const fileID = "1234";
 
@@ -159,7 +159,7 @@ exports.embedAndUpsert = onRequest(
                 id: embeddingID,
                 values: embedding,
                 metadata: {
-                  type: "study-notes",
+                  type: namespace,
                   originalText: chunk,
                   documentID: fileID,
                 },

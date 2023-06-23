@@ -105,7 +105,7 @@ const LoadData = () => {
                   headers: {
                     "Content-Type": "application/json",
                   },
-                  body: JSON.stringify({ chunks: chunks, fileID: file.name }),
+                  body: JSON.stringify({ chunks: chunks, fileID: file.name, namespace: 'study-files-2' }),
                 }
               )
                 .then((response) => {
