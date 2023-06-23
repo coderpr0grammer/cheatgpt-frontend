@@ -159,13 +159,13 @@ exports.embedAndUpsert = onRequest(
                 id: embeddingID,
                 values: embedding,
                 metadata: {
-                  type: namespace,
+                  type: "study-notes",
                   originalText: chunk,
                   documentID: fileID,
                 },
               },
             ],
-            namespace: "tester1",
+            namespace: namespace,
           };
 
           embeddingRefs.push({ id: embeddingID, fileID: fileID });

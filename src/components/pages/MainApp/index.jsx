@@ -1,51 +1,81 @@
 import { useState } from "react";
+
 const MainApp = () => {
   const [searchLoading, setSearchLoading] = useState(false);
   const [results, setResults] = useState([]);
+  const [inputValue, setInputValue] = useState("");
+  const [GPTResponse, setGPTResponse] = useState("");
+  const [useGPT, setUseGPT] = useState(true);
+  const [GPTResponseLoading, setGPTResponseLoading] = useState(false);
+
+  function copyToClipboard(text) {
+    window.parent.postMessage({ copyFromCGPT: text }, "*");
+  }
 
   return (
-    <div>
-      <form>
+    <div className="p-3 flex flex-col justify-center items-center">
+      <form className="mb-2">
         <input
           type="text"
+          className={`shadow border mt-6 p-1 rounded-lg bg-transparent `}
+          value={inputValue}
           placeholder="question"
-          style={{
-            background: "transparent",
-            border: "0 0 0.5px solid gray 0",
+          required
+          onChange={(e) => {
+            setInputValue(e.target.value);
           }}
         />
         <button
-          style={{ background: "transparent", border: "1px solid gray" }}
           type="submit"
+          className={`shadow border rounded-lg text-sm px-3 py-1.5 ml-1 ${searchLoading && 'text-xs'}`}
+          // disabled={searchLoading}
           onClick={(e) => {
             e.preventDefault();
             setSearchLoading(true);
 
-            fetch(
-              "http://embeddings-api.vercel.app/api/yt-transcript?videoID=JY_d0vf-rfw"
-            )
-              .then((data) => data.json())
-              .then((result) => {
-                console.log(result);
-              });
+            // fetch('http://embeddings-api.vercel.app/api/yt-transcript?videoID=JY_d0vf-rfw')
+            // .then((data)=> data.json())
+            // .then((result)=> {
+            //   console.log(result)
+            // })
+
             try {
-              const request = fetch(
-                "https://embeddings-api.vercel.app/api/search",
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({ query: inputValue, topK: 5 }),
-                }
-              )
+              fetch("https://embeddings-api.vercel.app/api/search", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  query: inputValue,
+                  topK: 5,
+                  namespace: "study-files-2",
+                }),
+              })
                 .then((data) => data.json())
                 .then((result) => {
                   console.log(result.matches);
                   setResults(result.matches);
-                  setSearchLoading(false);
 
-                  
+                  if (useGPT) {
+                    setGPTResponseLoading(true);
+                    const { originalText } = result.matches[0].metadata;
+
+                    fetch("https://embeddings-api.vercel.app/api/search/summarize", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({ searchResult: originalText }),
+                    })
+                      .then((data) => data.json())
+                      .then((result) => {
+                        console.log(result);
+                        setGPTResponse(result.content);
+                        setGPTResponseLoading(false);
+                      });
+                  }
+
+                  setSearchLoading(false);
                 });
             } catch (e) {
               alert(e);
@@ -53,9 +83,49 @@ const MainApp = () => {
             }
           }}
         >
-          Ask
+          {searchLoading ? "searching" : "Search"}
         </button>
+        <div className="m-2 mb-0 flex items-center">
+          <input
+            type="checkbox"
+            checked={useGPT}
+            onChange={() => setUseGPT(!useGPT)}
+          />
+          <small className="text-gray-500 text-xs">&nbsp;Get GPT summary</small>
+        </div>
       </form>
+
+      {GPTResponse ? (
+        <div className="rounded-lg p-3 border shadow-md">
+          <small className="flex text-gray-500 mb-1">GPT Response</small>
+          <button
+            className="p-1 rounded-lg border shadow-sm text-xs mr-1"
+            onClick={() => copyToClipboard(GPTResponse)}
+          >
+            Copy
+          </button>
+          {GPTResponse}
+        </div>
+      ) : (
+        GPTResponseLoading && (
+          <div className="rounded-lg p-3 m-2 border shadow-md w-full">
+            <p className="text-xs">Getting GPT response...</p>
+          </div>
+        )
+      )}
+
+      {results &&
+        results.map((item, index) => (
+          <div key={index} className="rounded-lg p-3 m-2 border shadow-md">
+            <button
+              className="p-1 rounded-lg border shadow-sm text-xs mr-1"
+              onClick={() => copyToClipboard(item.metadata.originalText)}
+            >
+              Copy
+            </button>
+            ...{item.metadata.originalText}...
+          </div>
+        ))}
     </div>
   );
 };
