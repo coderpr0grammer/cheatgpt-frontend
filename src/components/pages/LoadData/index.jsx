@@ -229,6 +229,7 @@ const LoadData = () => {
 
 
     for (let file in filesArray) {
+      console.log(file)
       processDocxFile(file)
     }
 
