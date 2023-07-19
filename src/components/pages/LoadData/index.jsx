@@ -227,19 +227,19 @@ const LoadData = () => {
     const compressedPackage = await compressFiles(filesArray);
     console.log(compressedPackage);
 
-    // const url =
-    //   "http://127.0.0.1:5001/cheatgpt-extesnion/us-central1/processCompressedFiles";
-    // fetch(url, {
-    //   method: "POST",
-    //   body: compressedPackage,
-    //   // headers: {
-    //   //   "Content-Encoding": "gzip", // Indicate the compressed data format
-    //   // },
-    // })
-    // .then((res)=> res.json())
-    // .then((response) => {
-    //   console.log(response)
-    // })
+    const url =
+      "https://processcompressedfiles-wejuqjonkq-uc.a.run.app";
+    fetch(url, {
+      method: "POST",
+      body: compressedPackage,
+      // headers: {
+      //   "Content-Encoding": "gzip", // Indicate the compressed data format
+      // },
+    })
+    .then((res)=> res.json())
+    .then((response) => {
+      console.log(response)
+    })
 
     
   };

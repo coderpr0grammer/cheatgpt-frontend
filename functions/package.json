@@ -31,6 +31,7 @@
     "nodemon": "^2.0.22",
     "openai": "^3.3.0",
     "pako": "^2.1.0",
+    "pdfjs-dist": "^3.8.162",
     "require": "^0.4.4",
     "textract": "^2.5.0",
     "uuid": "^9.0.0",

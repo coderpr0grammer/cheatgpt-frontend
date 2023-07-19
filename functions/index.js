@@ -143,34 +143,34 @@ exports.embedAndUpsert = onRequest(
   }
 );
 
-exports.currentTimeStream = onRequest((request, response) => {
-  cors(request, response, async () => {
-    // Set response headers to allow streaming
-    response.setHeader("Content-Type", "text/event-stream");
-    response.setHeader("Cache-Control", "no-cache");
-    response.setHeader("Connection", "keep-alive");
-    response.setHeader("Access-Control-Allow-Origin", "*");
-    response.flushHeaders();
+// exports.currentTimeStream = onRequest((request, response) => {
+//   cors(request, response, async () => {
+//     // Set response headers to allow streaming
+//     response.setHeader("Content-Type", "text/event-stream");
+//     response.setHeader("Cache-Control", "no-cache");
+//     response.setHeader("Connection", "keep-alive");
+//     response.setHeader("Access-Control-Allow-Origin", "*");
+//     response.flushHeaders();
 
-    const sendEventStreamData = (data) => {
-      response.write(`${JSON.stringify(data)}`);
-    };
+//     const sendEventStreamData = (data) => {
+//       response.write(`${JSON.stringify(data)}`);
+//     };
 
-    // Set an interval to send updates every second
-    const interval = setInterval(() => {
-      const currentTime = new Date().toLocaleTimeString();
-      const message = { currentTime };
+//     // Set an interval to send updates every second
+//     const interval = setInterval(() => {
+//       const currentTime = new Date().toLocaleTimeString();
+//       const message = { currentTime };
 
-      sendEventStreamData(message);
-    }, 1000);
+//       sendEventStreamData(message);
+//     }, 1000);
 
-    // End the response after 10 seconds
-    setTimeout(() => {
-      clearInterval(interval);
-      response.end();
-    }, 10000);
-  });
-});
+//     // End the response after 10 seconds
+//     setTimeout(() => {
+//       clearInterval(interval);
+//       response.end();
+//     }, 10000);
+//   });
+// });
 
 exports.streamedEmbedAndUpsert = onRequest(
   {
@@ -439,7 +439,11 @@ const processPDF = async (pdfBuffer) => {
   }
 };
 
-exports.processCompressedFiles = onRequest(async (req, res) => {
+exports.processCompressedFiles = onRequest({
+  timeoutSeconds: 300,
+  memory: "1GiB",
+},
+async (req, res) => {
   cors(req, res, async () => {
     try {
       // Check if the request method is POST
