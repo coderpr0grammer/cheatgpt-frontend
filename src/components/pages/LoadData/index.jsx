@@ -156,6 +156,7 @@ const LoadData = () => {
 
               const url =
                 "https://streamedembedandupsert-wejuqjonkq-uc.a.run.app";
+
               fetch(url, {
                 method: "POST",
                 cache: "no-cache",
@@ -190,7 +191,10 @@ const LoadData = () => {
                     // console.log(progress);
                   }
                 }
-              });
+              })
+              .catch((err)=> {
+                console.log("error fetching api: ", err)
+              })
 
               // embedBatch(chunks, async (embeddings) => {
               //   await chunkedUpsert(index.current, embeddings, "default");
