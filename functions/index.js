@@ -46,12 +46,12 @@ const openai = new OpenAIApi(configuration);
 
 const pineconeClient = new PineconeClient();
 
-async function run() {
+async function run(indexName) {
   await pineconeClient.init({
     apiKey: process.env.PINECONE_API_KEY,
     environment: process.env.PINECONE_ENVIRONMENT,
   });
-  let index = pineconeClient.Index("study-notes");
+  let index = pineconeClient.Index(indexName);
 
   return index;
 }
@@ -95,9 +95,10 @@ exports.embedAndUpsert = onRequest(
   async (req, res) => {
     cors(req, res, async () => {
       // your function body here - use the provided req and res from cors
-      let index = await run();
-
       const { chunks, fileID, namespace } = req.body;
+
+      let index = await run(namespace);
+
       //   const chunks = ["hello", "world"];
       //   const fileID = "1234";
 
@@ -190,9 +191,10 @@ exports.streamedEmbedAndUpsert = onRequest(
       };
 
       // your function body here - use the provided req and res from cors
-      let index = await run();
+      const { chunks, fileID, namespace, indexName } = req.body;
 
-      const { chunks, fileID, namespace } = req.body;
+      let index = await run(indexName);
+
       //   const chunks = ["hello", "world"];
       //   const fileID = "1234";
 

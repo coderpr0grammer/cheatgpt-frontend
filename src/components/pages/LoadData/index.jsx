@@ -169,6 +169,7 @@ const LoadData = () => {
                   chunks: chunks,
                   fileID: file.name,
                   namespace: "study-files-2",
+                  indexName: "study-files-2"
                 }),
               }).then(async (response) => {
                 const reader = response.body.getReader();
