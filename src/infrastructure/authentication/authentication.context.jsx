@@ -18,6 +18,7 @@ const AuthenticationContextProvider = ({ children }) => {
     auth.onAuthStateChanged((u) => {
       if (u) {
         setUser(u);
+        setUid(u.uid)
         if (location.pathname == "/login") {
           navigate("/load-data");
         }
