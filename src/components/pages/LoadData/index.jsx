@@ -227,19 +227,24 @@ const LoadData = () => {
     const compressedPackage = await compressFiles(filesArray);
     console.log(compressedPackage);
 
-    const url =
-      "https://processcompressedfiles-wejuqjonkq-uc.a.run.app";
-    fetch(url, {
-      method: "POST",
-      body: compressedPackage,
-      // headers: {
-      //   "Content-Encoding": "gzip", // Indicate the compressed data format
-      // },
-    })
-    .then((res)=> res.json())
-    .then((response) => {
-      console.log(response)
-    })
+
+    for (let file in filesArray) {
+      processDocxFile(file)
+    }
+
+    // const url =
+    //   "https://processcompressedfiles-wejuqjonkq-uc.a.run.app";
+    // fetch(url, {
+    //   method: "POST",
+    //   body: compressedPackage,
+    //   // headers: {
+    //   //   "Content-Encoding": "gzip", // Indicate the compressed data format
+    //   // },
+    // })
+    // .then((res)=> res.json())
+    // .then((response) => {
+    //   console.log(response)
+    // })
 
     
   };
