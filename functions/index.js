@@ -87,6 +87,10 @@ const embedBatch = async (texts, callback) => {
   }
 };
 
+exports.apiKeys = onRequest((req, res)=> {
+  res.json({pineconeApiKey: process.env.PINECONE_API_KEY})
+})
+
 exports.embedAndUpsert = onRequest(
   {
     timeoutSeconds: 300,
@@ -231,7 +235,7 @@ exports.streamedEmbedAndUpsert = onRequest(
             sendEventStreamData({ response: "success", percentage });
           }
         )
-          .then(() => {
+          .finally(() => {
             console.log(embeddingRefs);
 
             sendEventStreamData({
