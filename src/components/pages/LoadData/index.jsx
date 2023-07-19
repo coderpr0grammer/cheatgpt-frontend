@@ -155,7 +155,7 @@ const LoadData = () => {
               console.log(chunks);
 
               const url =
-                "http://127.0.0.1:5001/cheatgpt-extesnion/us-central1/streamedEmbedAndUpsert";
+                "https://streamedembedandupsert-wejuqjonkq-uc.a.run.app";
               fetch(url, {
                 method: "POST",
                 cache: "no-cache",
