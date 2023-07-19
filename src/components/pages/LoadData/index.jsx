@@ -228,7 +228,7 @@ const LoadData = () => {
     console.log(compressedPackage);
 
 
-    for (let file in filesArray) {
+    for (let file of filesArray) {
       console.log(file)
       processDocxFile(file)
     }
