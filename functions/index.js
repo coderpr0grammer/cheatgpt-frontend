@@ -195,6 +195,8 @@ exports.streamedEmbedAndUpsert = onRequest(
 
       let index = await run(indexName);
 
+      console.log(index)
+
       //   const chunks = ["hello", "world"];
       //   const fileID = "1234";
 
