@@ -10,6 +10,7 @@ import pako from "pako";
 import JSZip from "jszip";
 
 const LoadData = () => {
+
   const [progresses, setProgresses] = useState([]);
   const [dragging, setDragging] = useState(false);
 
@@ -118,6 +119,23 @@ const LoadData = () => {
         });
     });
   };
+
+  const processPDFFile = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const testURL = "http://127.0.0.1:5001/cheatgpt-extesnion/us-central1/cheatgpt_api/process_pdf"
+
+    const liveURL = "https://cheatgpt-api-wejuqjonkq-uc.a.run.app/process_pdf"
+
+    const response = await fetch(liveURL, {
+        method: "POST",
+        body: formData,
+      });
+    const data = await response.json()
+
+    console.log(data)
+  }
 
   function processDocxFile(file) {
     const reader = new FileReader();
@@ -228,29 +246,23 @@ const LoadData = () => {
 
   const handleFiles = async (files) => {
     const filesArray = [...files];
-    console.log(filesArray);
-    const compressedPackage = await compressFiles(filesArray);
-    console.log(compressedPackage);
+    // console.log(filesArray);
+    // const compressedPackage = await compressFiles(filesArray);
+    // console.log(compressedPackage);
 
 
-    for (let file of filesArray) {
-      console.log(file)
-      processDocxFile(file)
+    // for (let file of filesArray) {
+    //   console.log(file)
+    //   processDocxFile(file)
+    // }
+
+  for (let file of filesArray) {
+    if (file.type === "application/pdf") {
+      //is a pdf
+      const text = await processPDFFile(file)
+      // console.log(text)
     }
-
-    // const url =
-    //   "https://processcompressedfiles-wejuqjonkq-uc.a.run.app";
-    // fetch(url, {
-    //   method: "POST",
-    //   body: compressedPackage,
-    //   // headers: {
-    //   //   "Content-Encoding": "gzip", // Indicate the compressed data format
-    //   // },
-    // })
-    // .then((res)=> res.json())
-    // .then((response) => {
-    //   console.log(response)
-    // })
+  }
 
     
   };

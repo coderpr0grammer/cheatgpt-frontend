@@ -14,21 +14,21 @@ const AuthenticationContextProvider = ({ children }) => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    auth.onAuthStateChanged((u) => {
-      if (u) {
-        setUser(u);
-        setUid(u.uid)
-        if (location.pathname == "/login") {
-          navigate("/load-data");
-        }
-      } else {
-        if (location.pathname != '/') {
-          navigate("/login");
-        }
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   auth.onAuthStateChanged((u) => {
+  //     if (u) {
+  //       setUser(u);
+  //       setUid(u.uid)
+  //       if (location.pathname == "/login") {
+  //         navigate("/load-data");
+  //       }
+  //     } else {
+  //       if (location.pathname != '/') {
+  //         navigate("/login");
+  //       }
+  //     }
+  //   });
+  // }, []);
 
   return (
     <AuthenticationContext.Provider
