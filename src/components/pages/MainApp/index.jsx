@@ -62,6 +62,7 @@ const MainApp = () => {
               })
               .catch((err) => {
                 console.error(err);
+                alert(err)
                 setSearchLoading(false);
               });
 
