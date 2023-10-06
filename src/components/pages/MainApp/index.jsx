@@ -9,7 +9,7 @@ const MainApp = () => {
   const [GPTResponseLoading, setGPTResponseLoading] = useState(false);
 
   function copyToClipboard(text) {
-    navigator.clipboard.writeText(text)
+    navigator.clipboard.writeText(text);
     window.parent.postMessage({ copyFromCGPT: text }, "*");
   }
 
@@ -39,7 +39,8 @@ const MainApp = () => {
             const testURL =
               "http://127.0.0.1:5001/cheatgpt-extesnion/us-central1/cheatgpt_api/query";
 
-              const liveURL = "https://cheatgpt-api-wejuqjonkq-uc.a.run.app/query"
+            const liveURL =
+              "https://cheatgpt-api-wejuqjonkq-uc.a.run.app/query";
 
             fetch(liveURL, {
               method: "POST",
@@ -62,7 +63,7 @@ const MainApp = () => {
               })
               .catch((err) => {
                 console.error(err);
-                alert(err)
+                alert(err);
                 setSearchLoading(false);
               });
 
@@ -149,10 +150,15 @@ const MainApp = () => {
 
       {results && results.length > 0 && (
         <>
-          <small className="flex text-gray-500 mb-1 mt-4 self-start">Search Results (Sources)</small>
-        
+          <small className="flex text-gray-500 mb-1 mt-4 self-start">
+            Search Results (Sources)
+          </small>
+
           {results.map((item, index) => (
             <div key={index} className="rounded-lg p-3 m-2 border shadow-md">
+              <small className="flex text-gray-500 mb-3 self-start">
+                Source #{index} {item.metadata.file_name}
+              </small>
               <button
                 className="p-1 rounded-lg border shadow-sm text-xs mr-1"
                 onClick={() => copyToClipboard(item.metadata.original_text)}
