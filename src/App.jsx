@@ -11,7 +11,7 @@ function App() {
   return (
     <>
       <GoogleOAuthProvider
-        clientId='1089241278813-lidkki376ftqe1pkmnnos76co27nm0h7.apps.googleusercontent.com'
+        clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
       >
         <Router>
           <AuthenticationContextProvider>
